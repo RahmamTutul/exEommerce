@@ -77,6 +77,7 @@
               </li>
             </ul>
           </li>
+
           <li class="nav-item">
             <a href="{{route('product.index')}}" class="nav-link {{ (request()->is('product/*')) ? 'active' : '' }}">
                 <i class="nav-icon  fas fa-tachometer-alt"></i>
@@ -85,6 +86,16 @@
                 </p>
             </a>
           </li>
+          @if (Auth::guard('admin')->user()->type=="superadmin" || Auth::guard('admin')->user()->type=="admin")
+          <li class="nav-item">
+            <a href="{{url('/admin/admin-subadmin')}}" class="nav-link {{ (request()->is('/admin/admin-subadmin/*')) ? 'active' : '' }}">
+                <i class="nav-icon  fas fa-tachometer-alt"></i>
+                <p>
+                    Admin / Subadmins
+                </p>
+            </a>
+          </li>
+          @endif
           <li class="nav-item">
             <a href="{{route('admin.brands.index')}}" class="nav-link {{ (request()->is('admin/brands')) ? 'active' : '' }}">
                 <i class="nav-icon  fas fa-tachometer-alt"></i>

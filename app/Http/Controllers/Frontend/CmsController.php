@@ -28,15 +28,15 @@ class CmsController extends Controller
 
    public function Contact(Request $request){
        if($request->isMethod('post')){
-           $data= $request->all();
-          $email= "rahmantutul@yopmail.com";
+          $data= $request->all();
+          $email= "admin100@yopmail.com";
           $massageData=[
               'name'=> $data['name'],
               'email'=> $data['email'],
               'subject'=> $data['subject'],
               'massage'=> $data['massage'],
           ];
-          Mail::send('emails.enquiry', $massageData, function($massage) use($email) {
+          Mail::send('frontend.emails.enquiry', $massageData, function($massage) use($email) {
               $massage->to($email)->subject('Enquiry from E-commerce');
           });
           Alert::success('Success','Thank you for your enquiry!');

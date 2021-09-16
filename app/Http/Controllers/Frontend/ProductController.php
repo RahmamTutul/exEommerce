@@ -62,7 +62,7 @@ class ProductController extends Controller
             }else{
                 $categoryProducts->orderBy('id','Desc');
             }
-            $categoryProducts=$categoryProducts->paginate(3);
+            $categoryProducts=$categoryProducts->paginate(6);
 
            // end filter product with loading
 

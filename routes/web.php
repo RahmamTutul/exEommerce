@@ -52,6 +52,8 @@ Route::group(['prefix' => '/admin' ,'as'=>'admin.'] , function () {
         Route::post('update-pswd',[AdminController::class ,'UpdatePassword'])->name('update.password');
         Route::get('logout',[AdminController::class ,'logout'])->name('logout');
         Route::match(['get', 'post'], '/update/info',[AdminController::class ,'UpdateInfo'])->name('update.info');
+        Route::get('admin-subadmin',[AdminController::class ,'AdminRole'])->name('AdminRole');
+        Route::post('update-admin-status',[AdminController::class, 'updateAdminStatus'])->name('updateAdminStatus');
     });
     // Section group
 
@@ -135,9 +137,7 @@ Route::get('/delete-cmsInfo/{id}',[cmsController::class, 'DeleteCMS'])->name('De
 
 Route::namespace('Frontend')->group(function(){
     Route::get('/',[indexController::class, 'index'])->name('index');
-
     $catUrls=Category::where('status',1)->select('url')->get()->pluck('url')->toArray();
-
     foreach($catUrls as $url){
         Route::get('/'.$url,[FrontendProductController::class, 'listing'])->name('listing');
     }

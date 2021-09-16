@@ -1,4 +1,3 @@
-<?php use App\Models\Product; ?>
 @extends('frontend.layouts.app')
 
 @push('stylesheet')
@@ -26,21 +25,21 @@
             <fieldset>
               <div class="control-group">
 
-                  <input type="text" name="name" placeholder="name" class="input-xlarge"/>
+                  <input type="text" name="name" placeholder="name" class="input-xlarge" required/>
 
               </div>
                <div class="control-group">
 
-                  <input type="text" name="email" placeholder="email" class="input-xlarge"/>
+                  <input type="email" name="email" placeholder="email" class="input-xlarge" required/>
 
               </div>
                <div class="control-group">
 
-                  <input type="text" name="subject" placeholder="subject" class="input-xlarge"/>
+                  <input type="text" name="subject" placeholder="subject" class="input-xlarge" required/>
 
               </div>
               <div class="control-group">
-                  <textarea name="massage" rows="3" id="textarea" class="input-xlarge"></textarea>
+                  <textarea name="massage" rows="3" id="textarea" class="input-xlarge" required></textarea>
 
               </div>
 

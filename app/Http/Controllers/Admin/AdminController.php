@@ -26,7 +26,7 @@ class AdminController extends Controller
                 'password' => 'required',
             ]);
             // echo "<pre>"; print_r($data); die;
-            if(Auth::guard('admin')->attempt(['email' => $data['email'], 'password' => $data['password']])){
+            if(Auth::guard('admin')->attempt(['email' => $data['email'], 'password' => $data['password'], 'status'=>1])){
                  Alert::success('Success!', ' Login Successfully!');
                 return redirect('admin/dashboard');
             }else{
@@ -117,5 +117,25 @@ class AdminController extends Controller
         $details = Auth::guard('admin')->user();
         return view('backend.pages.update-info')
         ->with('detail', $details);
+    }
+    public function AdminRole(){
+        if(Auth::guard('admin')->user()->type=="subadmin"){
+            Alert::error('Sorry!', 'You are not allowed to perform this action!');
+            return redirect('admin/dashboard');
+        }
+        $allAdmins= Admin::get();
+         return view('backend.pages.Admins.index')->with(compact('allAdmins'));
+    }
+    public function updateAdminStatus(Request $request){
+        if($request->ajax()){
+            $data= $request->all();
+            if($data['status']=='Active'){
+                $status=0;
+            }else{
+                $status=1;
+            }
+            Admin::where('id',$data['admin_id'])->update(['status'=>$status]);
+            return response()->json(['status'=>$status, 'id'=>$data['admin_id']]);
+        }
     }
 }
