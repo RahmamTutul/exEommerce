@@ -52,6 +52,12 @@
                   <p>Update Info</p>
                 </a>
               </li>
+               <li class="nav-item">
+                <a href="{{url('admin/other-settings')}}" class="nav-link {{ (request()->is('admin/other-settings')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Update cart value</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview {{ (request()->is('admin/section/index') || request()->is('admin/category')) ? 'menu-open' : '' }}">
@@ -141,6 +147,14 @@
                 <i class="nav-icon  fas fa-tachometer-alt"></i>
                 <p>
                    Shipping Charges
+                </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{url('admin/ratting/index')}}" class="nav-link {{ (request()->is('admin/ratting/*')) ? 'active' : '' }}">
+                <i class="nav-icon  fas fa-tachometer-alt"></i>
+                <p>
+                   Rattings/Reviews
                 </p>
             </a>
           </li>

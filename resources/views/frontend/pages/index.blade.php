@@ -9,6 +9,7 @@
     <div class="well well-small">
         @if (count($featuredArrayChunk)>0)
         <h4>Featured Products <small class="pull-right">200+ featured products</small></h4>
+
         <div class="row-fluid">
             <div id="featured" class="carousel slide">
                 <div class="carousel-inner">
@@ -83,6 +84,7 @@
         </li>
         @endforeach
 </div>
+
 @endsection
 
 @push('script')

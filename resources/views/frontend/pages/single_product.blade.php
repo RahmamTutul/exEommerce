@@ -2,13 +2,48 @@
  use App\Models\Product;
  $discount = Product::getProductDiscount($productData['id']);
  ?>
+
 @extends('frontend.layouts.app')
-
-@push('stylesheet')
-
-@endpush
-
+ 
 @section('content')
+
+<style>
+div.stars {
+  width: 270px;
+  display: inline-block;
+}
+
+input.star { display: none; }
+
+label.star {
+  float: right;
+  padding: 10px;
+  font-size: 36px;
+  color: #444;
+  transition: all .2s;
+}
+
+input.star:checked ~ label.star:before {
+  content: '\f005';
+  color: #FD4;
+  transition: all .25s;
+}
+
+input.star-5:checked ~ label.star:before {
+  color: #FE7;
+  text-shadow: 0 0 20px #952;
+}
+
+input.star-1:checked ~ label.star:before { color: #F62; }
+
+label.star:hover { transform: rotate(-15deg) scale(1.3); }
+
+label.star:before {
+  content: '\f006';
+  font-family: FontAwesome;
+}
+
+</style>
 <div class="span9">
     <ul class="breadcrumb">
         <li><a href="{{url('/')}}">Home</a> <span class="divider">/</span></li>
@@ -40,18 +75,27 @@
 
             <div class="btn-toolbar">
                 <div class="btn-group">
-                    <span class="btn"><i class="icon-envelope"></i></span>
-                    <span class="btn" ><i class="icon-print"></i></span>
-                    <span class="btn" ><i class="icon-zoom-in"></i></span>
-                    <span class="btn" ><i class="icon-star"></i></span>
-                    <span class="btn" ><i class=" icon-thumbs-up"></i></span>
-                    <span class="btn" ><i class="icon-thumbs-down"></i></span>
+                    <span class="btn"> <i id="star" class="icon-envelope"></i></span>
+                    <span class="btn" ><i id="star" class="icon-print"></i></span>
+                    <span class="btn" ><i id="star" class="icon-zoom-in"></i></span>
+                    <span class="btn" ><i id="star" class="icon-star"></i></span>
+                    <span class="btn" ><i id="star" class=" icon-thumbs-up"></i></span>
+                    <span class="btn" ><i id="star" class="icon-thumbs-down"></i></span>
                 </div>
             </div>
         </div>
         <div class="span6">
             <h3>{{$productData['product_name']}} </h3>
             <small>- {{$productData['brand']['name']}}</small>
+            @if($averageStarRating>0)
+            <div>
+             <?php
+             $count=1;
+              while($count<=$averageStarRating) {  ?> 
+              <span> &#9733 </span>
+              <?php $count++; } ?> ({{$averageRating}})
+             </div>
+             @endif
             <hr class="soft"/>
             <strong>{{$attribute}} items in stock</strong>
             <form action="{{url('add-to-cart')}}" method="POST" class="form-horizontal qtyFrm">
@@ -93,6 +137,10 @@
             <ul id="productDetail" class="nav nav-tabs">
                 <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
                 <li><a href="#profile" data-toggle="tab">Related Products</a></li>
+                @if (isset($productData['product_video']) &&!empty($productData['product_video']))
+                <li><a href="#video" data-toggle="tab">Product video</a></li>
+                @endif
+                <li><a href="#rating" data-toggle="tab">Review & Rating</a></li>
             </ul>
             <div id="myTabContent" class="tab-content">
                 <div class="tab-pane fade active in" id="home">
@@ -153,12 +201,77 @@
                     </div>
                     <br class="clr">
                 </div>
+                <div class="tab-pane fade" id="video">
+                    <hr class="soft"/>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="blockView">
+                            <video controls width="640px" height="480px">
+                                <source src="{{asset('storage/video/product_video'.$productData['product_video'])}}">
+                            </video>
+                            <hr class="soft"/>
+                        </div>
+                    </div>
+                    <br class="clr">
+                </div>
+                 <div class="tab-pane fade" id="rating">
+                    <hr class="soft"/>
+                    <div class="tab-content">
+                        <div class="row">
+                           <div class="span4">
+                                 <h5>Rate Us</h5>
+                                <form class="form-horizontal" action="{{url('/submit-rate')}}" method="POST">
+                                @csrf
+                                <fieldset>
+                                <div class="control-group stars">
+                                <span class="star-rating">
+                                    <input class="star star-5" id="star-5" type="radio" name="star" value="5"/>
+                                    <label class="star star-5" for="star-5"></label>
+                                    <input class="star star-4" id="star-4" type="radio" name="star" value="4"/>
+                                    <label class="star star-4" for="star-4"></label>
+                                    <input class="star star-3" id="star-3" type="radio" name="star" value="3"/>
+                                    <label class="star star-3" for="star-3"></label>
+                                    <input class="star star-2" id="star-2" type="radio" name="star" value="2"/>
+                                    <label class="star star-2" for="star-2"></label>
+                                    <input class="star star-1" id="star-1" type="radio" name="star" value="1"/>
+                                    <label class="star star-1" for="star-1"></label>
+                                </div>
+                                <input type="hidden" name="product_id" value="{{ $productData['id'] }}">
+                                <div class="control-group">
+                                <textarea name="review" rows="3" id="textarea" class="input-xlarge"></textarea>
+                                </div>
+                                </fieldset>
+                                <button class="btn btn-small" type="submit">Submit</button>
+                                </form>
+                           </div>
+                           <div class="span4">
+                              <h4>User reviews</h4>
+                              @if (count($ratings)>0)
+                                @foreach ($ratings as $rating)
+                                    <div>
+                                        <?php 
+                                            $count=1; 
+                                            while($count<=$rating['retting']) { ?>
+                                             <span>&#9733</span>
+                                             <?php $count++; }?>
+                                            <p>{{ $rating['review'] }}</p>
+                                            By<small>{{ $rating['user']['name'] }}</small>
+                                            <small>( {{ date('d-m-Y H:i:s', strtotime($rating['created_at'])) }} )</small>
+                                    </div>
+                                @endforeach
+                              @else
+                                  <span>No rating available for this product!</span>
+                              @endif
+                             
+                           </div>
+                        </div>
+                    </div>
+                    <br class="clr">
+                </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
-
 @push('script')
 
 @endpush

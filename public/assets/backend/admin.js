@@ -291,7 +291,7 @@ $(document).on("click",".updateProductStatus",function(){
                     if(resp['status']==0){
                         $('#shipping-'+shipping_id).html("<i class='fas fa-toggle-off' status='Disable'></i>");
                     }else if(resp['status']==1){
-                        $('#shipping'+shipping_id).html("<i class='fas fa-toggle-on' status='Active'></i>");
+                        $('#shipping-'+shipping_id).html("<i class='fas fa-toggle-on' status='Active'></i>");
                     }
                 },error:function(){
                     alert("Error!");
@@ -310,7 +310,7 @@ $(document).on("click",".updateProductStatus",function(){
                 if(resp['status']==0){
                     $('#cms-'+cms_id).html("<i class='fas fa-toggle-off' status='Disable'></i>");
                 }else if(resp['status']==1){
-                    $('#cms'+cms_id).html("<i class='fas fa-toggle-on' status='Active'></i>");
+                    $('#cms-'+cms_id).html("<i class='fas fa-toggle-on' status='Active'></i>");
                 }
             },error:function(){
                 alert("Error!");
@@ -330,7 +330,26 @@ $(document).on("click",".updateProductStatus",function(){
                     if(resp['status']==0){
                         $('#admin-'+cms_id).html("<i class='fas fa-toggle-off' status='Disable'></i>");
                     }else if(resp['status']==1){
-                        $('#admin'+cms_id).html("<i class='fas fa-toggle-on' status='Active'></i>");
+                        $('#admin-'+cms_id).html("<i class='fas fa-toggle-on' status='Active'></i>");
+                    }
+                },error:function(){
+                    alert("Error!");
+                }
+            })
+            });
+              // Update Coupon Status
+        $(document).on("click",".updateRatingStatus",function(){
+            var status =$(this).children("i").attr("status");
+            var rating_id= $(this).attr('rating_id');
+            $.ajax({
+                type:'post',
+                url:'/admin/update-rating-status',
+                data:{status:status, rating_id:rating_id},
+                success:function(resp){
+                    if(resp['status']==0){
+                        $('#rating-'+rating_id).html("<i class='fas fa-toggle-off' status='Disable'></i>");
+                    }else if(resp['status']==1){
+                        $('#rating-'+rating_id).html("<i class='fas fa-toggle-on' status='Active'></i>");
                     }
                 },error:function(){
                     alert("Error!");

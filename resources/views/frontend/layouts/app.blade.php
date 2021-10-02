@@ -34,7 +34,9 @@
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{asset('assets/frontend/images/ico/apple-touch-icon-114-precomposed.png')}}">
 	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{asset('assets/frontend/images/ico/apple-touch-icon-72-precomposed.png')}}">
 	<link rel="apple-touch-icon-precomposed" href="{{asset('assets/frontend/images/ico/apple-touch-icon-57-precomposed.png')}}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 	<style type="text/css" id="enject"></style>
+	@stack('css')
     <style>
         form.cmxform label.error ,label.error{
             color: red;
@@ -69,6 +71,7 @@
 <script src="{{asset('assets/frontend/js/front_script.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/frontend/js/jquery.lightbox-0.5.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 @include('sweetalert::alert')
 
 

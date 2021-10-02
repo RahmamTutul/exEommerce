@@ -76,6 +76,7 @@
 <script src="{{asset('assets/backend/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('assets/backend/dist/js/adminlte.js')}}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+@include('sweetalert::alert')
 </body>
 </html>

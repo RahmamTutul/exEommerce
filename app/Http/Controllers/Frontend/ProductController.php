@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttribute;
+use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Route;
@@ -80,12 +81,13 @@ class ProductController extends Controller
                 $categoryDetails['breadcrumbs']= $search_product;
                 $categoryDetails['catDetails']['category_name']=$search_product;
                 $categoryDetails['catDetails']['description'] = "Search results for " . $search_product;
-                $categoryProducts= Product::with('brand')->where(function($query)use($search_product){
-                    $query->where('product_name','like', '%'.$search_product.'%')
-                    ->orWhere('product_code','like', '%'.$search_product.'%')
-                    ->orWhere('product_color','like', '%'.$search_product.'%')
-                    ->orWhere('product_description','like', '%'.$search_product.'%');
-                })->where('status',1);
+                $categoryProducts= Product::with('brand')->join('categories','categories.id','=','products.category_id')->where(function($query)use($search_product){
+                    $query->where('products.product_name','like', '%'.$search_product.'%')
+                    ->orWhere('products.product_code','like', '%'.$search_product.'%')
+                    ->orWhere('products.product_color','like', '%'.$search_product.'%')
+                    ->orWhere('products.product_description','like', '%'.$search_product.'%')
+                    ->orWhere('categories.category_name','like', '%'.$search_product.'%');
+                })->where('products.status',1);
                 $categoryProducts=$categoryProducts->get();
                 $page_name="Search";
                 return view('frontend.pages.listing')->with(compact('categoryDetails','categoryProducts','page_name'));
@@ -119,7 +121,23 @@ class ProductController extends Controller
         // dd($productData);
         $relatedProducts=Product::where('id','!=', $id)->limit(3)->inRandomOrder()->get()->toArray();
         // dd($relatedProducts);
-        return view('frontend.pages.single_product')->with(compact('productData','attribute','relatedProducts'));
+        //Rating product info
+        $ratings = Rating::with('user')->where(['status'=>1, 'product_id'=>$id])->orderBy('created_at','Desc')->get()->toArray();
+        $Rate =Rating::where(['status'=>1, 'product_id'=>$id])->sum('retting');
+        $count = Rating::where(['status'=>1, 'product_id'=>$id])->count();
+        if ($count>0) {
+            $averageRating =round( $Rate/$count,2);
+            $averageStarRating =round( $Rate/$count);
+        } else {
+            $averageRating =0;
+            $averageStarRating =0;
+        }
+        
+       
+        // dd($averageRating);
+        // dd($ratings);
+        return view('frontend.pages.single_product')->with(compact('productData','attribute','relatedProducts','ratings','averageRating','averageStarRating'));
+        
     }
     public function getProductPrice(Request $request){
         if($request->ajax()){

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\cmsController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\RattingController;
 use App\Http\Controllers\Admin\ShippingController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\indexController;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\OrdersController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\CmsController as FrontendCmsController;
+use App\Http\Controllers\Frontend\RatingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -54,6 +56,14 @@ Route::group(['prefix' => '/admin' ,'as'=>'admin.'] , function () {
         Route::match(['get', 'post'], '/update/info',[AdminController::class ,'UpdateInfo'])->name('update.info');
         Route::get('admin-subadmin',[AdminController::class ,'AdminRole'])->name('AdminRole');
         Route::post('update-admin-status',[AdminController::class, 'updateAdminStatus'])->name('updateAdminStatus');
+        Route::match(['get', 'post'], '/add-admin',[AdminController::class, 'AddAdmin']);
+        Route::match(['get', 'post'], '/edit-admin/{id}',[AdminController::class, 'EditAdmin']);
+        Route::match(['get', 'post'], '/change-role/{id}',[AdminController::class, 'ChangeRole']);
+        // Other settings routes
+        Route::match(['get', 'post'], '/other-settings/{id}',[AdminController::class, 'otherSettings']);
+        Route::get('/ratting/index',[RattingController::class ,'Index'])->name('Index');
+        Route::post('update-rating-status',[RattingController::class, 'updateRatingStatus']);
+        
     });
     // Section group
 
@@ -102,7 +112,6 @@ Route::group(['prefix' => '/admin' ,'as'=>'admin.'] , function () {
     Route::match(['get', 'post'], '/cms/create',[cmsController::class, 'Create']);
     Route::match(['get', 'post'], '/cms/edit/{id}',[cmsController::class, 'Edit']);
     Route::post('/update-cms-status',[cmsController::class, 'UpdateCmsStatus']);
-
 });
 
 Route::group(['prefix' => 'product', 'as'=>'product.'], function () {
@@ -160,6 +169,7 @@ Route::namespace('Frontend')->group(function(){
     Route::post('/login',[UserController::class,'UserLogin']);
     Route::post('/register',[UserController::class,'UserRegister']);
     Route::get('/logout',[UserController::class,'logout']);
+    Route::post('/submit-rate',[RatingController::class, 'submitRate']);
     Route::middleware(['auth'])->group(function () {
         // Check email validation for login or register
         Route::match(['get', 'post'],'/check-email',[UserController::class,'checkEmail']);
@@ -177,7 +187,6 @@ Route::namespace('Frontend')->group(function(){
         Route::get('/orders',[OrdersController::class,'Orders']);
         Route::get('/single_order/{id}',[OrdersController::class,'SingleOrder']);
         Route::get('/paypal',[CheckoutController::class,'Paypal']);
-
     });
     // Check user password correct or not
     Route::post('/check-current-password',[UserController::class, 'CheckCurrentPassword']);

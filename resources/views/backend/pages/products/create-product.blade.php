@@ -209,7 +209,14 @@
 @show
 
 @section('script')
+var uploadField = document.getElementById("product_video");
 
+uploadField.onchange = function() {
+    if(this.files[0].size > 1000){
+       alert("File is too big!");
+       this.value = "";
+    };
+};
 @endsection
 
 

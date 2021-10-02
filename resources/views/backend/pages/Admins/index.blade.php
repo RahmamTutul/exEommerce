@@ -27,7 +27,7 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                    <a class="btn btn-success btn-sm float-right" href="">Add Admin</a>
+                    <a class="btn btn-success btn-sm float-right" href="{{url('admin/add-admin')}}">Add Admin / Sub admin</a>
                   <h3 class="card-title">Admins/Subadmins</h3>
                 </div>
                 <!-- /.card-header -->
@@ -54,16 +54,17 @@
                             <td>{{$allAdmin->type}}</td>
                             <td class="text-center">
                             @if ($allAdmin->type!="superadmin")
+                            <a  href="{{url('admin/change-role',$allAdmin->id)}}"><i class="fas fa-lock" title="Change Role"></i></a> |
                             @if ($allAdmin->status== 1)
-                                <a class="updateAdminStatus" id="admin-{{$allAdmin->id}}" Admin_id="{{$allAdmin->id}}" href="javascript:void(0)" ><i class="fas fa-toggle-on" status="Active"></i></a>
+                                <a class="updateAdminStatus" id="admin-{{$allAdmin->id}}" Admin_id="{{$allAdmin->id}}" href="javascript:void(0)" title="Change status"><i class="fas fa-toggle-on" status="Active"></i></a>
                             @else
-                                <a class="updateAdminStatus" id="admin-{{$allAdmin->id}}" Admin_id="{{$allAdmin->id}}"  href="javascript:void(0)"><i class="fas fa-toggle-off" status="Disabled"></i></a>
+                                <a class="updateAdminStatus" id="admin-{{$allAdmin->id}}" Admin_id="{{$allAdmin->id}}"  href="javascript:void(0)" title="Change status"><i class="fas fa-toggle-off" status="Disabled"></i></a>
                             @endif
                             @endif
                             </td>
                             <td>
                             @if ($allAdmin->type!="superadmin")
-                            <a href="#" class="confirmDelete"  record="banner" recordid="{{$allAdmin->id}}">Delete</a> | <a href="{{url('admin/edit/allAdmin',$allAdmin->id)}}"> Edit</a>
+                            <a href="#" class="confirmDelete"  record="banner" recordid="{{$allAdmin->id}}">Delete</a> | <a href="{{url('admin/edit-admin',$allAdmin->id)}}"> Edit</a>
                             @endif
                             </td>
                         </tr>

@@ -58,6 +58,8 @@ class UserController extends Controller
             $user->mobile=$data['mobile'];
             $user->password= bcrypt($data['password']);
             $user->status=0;
+            date_default_timezone_set('Asia/Dhaka');
+            $user->created_at=date("d-m-Y","H:i:s");
             $user->save();
             // user email verification / send a verification code
             $email= $data['email'];

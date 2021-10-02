@@ -4,19 +4,27 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\OtherSettings;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use App\Models\AdminRole;
 
 class CategoryController extends Controller
 {
     public function category(){
         $category=Category::with(['section','parentcategory'])->get();
         $category = json_decode(json_encode($category));
+        $permission = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id, 'module'=>'categories'])->count();
+        if($permission==0){
+            Alert::error('Sorry!','You are not permitted for this action!');
+            return redirect()->back();
+        }
         return view('backend.pages.category.category')->with('categories', $category);
     }
     public function updateCategoryStatus(Request $request){
@@ -27,6 +35,7 @@ class CategoryController extends Controller
             }else{
                 $status=1;
             }
+            
             Category::where('id',$data['category_id'])->update(['status'=>$status]);
             return response()->json(['status'=>$status, 'category_id'=>$data['category_id']]);
          }

@@ -60,6 +60,7 @@ class ProductController extends Controller
            'product_price'=>'required',
            'product_image'=>'required',
            'product_description'=>'required',
+           'product_video'=>'required|mimes:mp4,ogx,oga,ogv,ogg,webm|size:10000',
 
        ]);
        $url =Str::slug($request->product_name);
